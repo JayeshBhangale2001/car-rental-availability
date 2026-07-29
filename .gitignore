@@ -427,3 +427,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+
+# --------------------------------------------------
+# Local interview files (do not commit)
+# --------------------------------------------------
+.private/
