@@ -109,6 +109,62 @@ Produced the complete project specification that was reviewed before implementat
 
 ---
 
+## 6. Solution Architecture
+
+### Objective
+Design a lightweight solution architecture suitable for the assignment.
+
+### Prompt
+Recommend a practical project structure using:
+- .NET 8 Minimal API
+- Core business library
+- xUnit tests
+- Angular frontend
+
+Clearly separate API concerns, business logic, provider implementations, pricing, validation, and booking storage.
+
+Do not generate code yet.
+
+### Outcome
+Defined the solution architecture including:
+- CarRental.Api
+- CarRental.Core
+- CarRental.Tests
+- Angular UI
+- Responsibilities for each layer
+
+After scaffolding, the solution was manually validated by running:
+- `dotnet restore`
+- `dotnet build`
+- `dotnet test`
+
+All commands completed successfully before proceeding to implementation.
+
+---
+
+## 7. Project Scaffolding
+
+### Objective
+Create the initial solution structure.
+
+### Prompt
+Scaffold the .NET solution and projects based on the approved architecture.
+
+Create:
+- Solution file
+- API project
+- Core class library
+- Test project
+- Required folders
+- Project references
+
+Do not implement business logic or endpoints.
+
+### Outcome
+Created the initial solution structure and project references, ready for implementation.
+
+---
+
 ## AI Usage Summary
 
 AI was used to:
