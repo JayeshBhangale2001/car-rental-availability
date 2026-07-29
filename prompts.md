@@ -165,6 +165,25 @@ Created the initial solution structure and project references, ready for impleme
 
 ---
 
+## 8. Domain Models and Provider Abstraction
+
+### Objective
+Create the initial business models and the common contract for rental providers.
+
+### Representative Prompt
+Create the core domain models and the provider interface in the CarRental.Core project.
+
+Keep the models independent from the API layer. Use enums where suitable and use simple immutable models. Create only the domain models and ICarRentalProvider in this step. Do not implement providers, pricing, validation, storage, services, or endpoints yet.
+
+Before creating the files, show the planned classes, properties, and interface methods for review.
+
+### Outcome
+Created the search, offer, booking, and booking confirmation models along with supporting enums.
+
+Created ICarRentalProvider as the common interface that PremiumDrive and BudgetWheels will implement.
+
+The generated design was reviewed and refined to include vehicle name, insurance type, currency, and provider information. The complete solution build succeeded after the changes.
+
 ## AI Usage Summary
 
 AI was used to:
