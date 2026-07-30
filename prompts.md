@@ -266,6 +266,49 @@ Created a provider-agnostic search service that calls all rental providers in pa
 
 Added unit tests for result aggregation, availability filtering, sorting, empty results, cancellation-token forwarding, and provider exception propagation.
 
+## 12. Validation
+
+### Objective
+Implement reusable validation in the Core layer without introducing API dependencies.
+
+### Representative Prompt
+Review `spec.md` and the existing domain models.
+
+Implement the validation layer with a generic validator contract, a centralized supported location catalog, and validators for search and booking requests.
+
+Keep the validation models HTTP-agnostic and add focused unit tests.
+
+### Outcome
+Implemented reusable validation models, centralized supported pickup locations, and validators for search and booking requests.
+
+Validation distinguishes input errors from business-rule violations so the API can later map them to appropriate HTTP responses.
+
+Added focused unit tests covering supported locations, document rules, invalid dates, invalid categories, and location-type mismatches.
+
+All tests passed successfully.
+
+
+## 13. Booking Service and In-Memory Store
+
+### Objective
+Implement the booking workflow using an in-memory store.
+
+### Representative Prompt
+Review `spec.md` and the existing booking models.
+
+Implement the booking service with an in-memory booking store and a pluggable booking reference generator.
+
+Keep the create result simple, avoid overwriting duplicate references, and add focused unit tests.
+
+### Outcome
+Implemented the booking service, booking store, and booking reference generator.
+
+The service validates requests, generates booking references, stores bookings safely in memory, supports lookup by reference, and prevents duplicate reference collisions.
+
+Added focused unit tests for booking creation, validation failures, duplicate references, lookup, and cancellation behavior.
+
+The full test suite passed successfully.
+
 ## AI Usage Summary
 
 AI was used to:
