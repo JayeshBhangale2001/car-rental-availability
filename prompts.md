@@ -309,6 +309,46 @@ Added focused unit tests for booking creation, validation failures, duplicate re
 
 The full test suite passed successfully.
 
+## 14. Minimal API
+
+### Objective
+Expose the car rental functionality through Minimal API endpoints.
+
+### Representative Prompt
+Review `spec.md` and the existing Core services.
+
+Implement the Minimal API for search, booking, and booking lookup. Keep the endpoints thin and reuse the existing Core services and validators.
+
+### Outcome
+Implemented three Minimal API endpoints:
+
+- GET /cars/search
+- POST /cars/book
+- GET /cars/booking/{reference}
+
+Added request and response DTOs, dependency injection, strict `yyyy-MM-dd` date parsing, consistent validation responses, and HTTP status mapping (200, 201, 400, 404, 422). Business logic remains in the Core layer.
+
+
+## 15. API Integration Tests
+
+### Objective
+Verify the API endpoints end-to-end.
+
+### Representative Prompt
+Review the API endpoints and add integration tests using `WebApplicationFactory`.
+
+Cover search, booking, and booking lookup with both success and error scenarios. Keep the tests focused.
+
+### Outcome
+Added integration tests for all API endpoints using `WebApplicationFactory`.
+
+Covered successful search, booking creation, booking lookup, invalid requests (400), business-rule validation (422), and missing booking references (404).
+
+Final test results:
+- Unit + Integration Tests: **57 Passed**
+- **0 Failed**
+
+
 ## AI Usage Summary
 
 AI was used to:
