@@ -184,6 +184,33 @@ Created ICarRentalProvider as the common interface that PremiumDrive and BudgetW
 
 The generated design was reviewed and refined to include vehicle name, insurance type, currency, and provider information. The complete solution build succeeded after the changes.
 
+
+
+## 9. Pricing Rules and Unit Tests
+
+### Objective
+Implement and verify the provider-specific rental pricing rules.
+
+### Representative Prompt
+Review the pricing rules in `spec.md` and suggest a small pricing design before creating files.
+
+Use one shared helper for rental nights. The pickup date should be included and the return date should be excluded.
+
+PremiumDrive should use flat daily pricing.
+
+BudgetWheels should calculate every rental night separately and apply a 20 percent surcharge to Friday, Saturday, and Sunday nights.
+
+Keep the pricing interface simple and expose only the final total price calculation. Add unit tests for weekday, weekend, mixed-date, single-night, and invalid-date cases.
+
+Do not implement providers, services, storage, endpoints, or frontend code in this step.
+
+### Outcome
+Created the shared rental-night calculator and separate pricing calculators for PremiumDrive and BudgetWheels.
+
+Added unit tests for date boundaries, flat pricing, weekend surcharges, mixed rental periods, and invalid date ranges.
+
+One incorrect test expectation was identified during execution, reviewed, and corrected. All 13 tests passed successfully.
+
 ## AI Usage Summary
 
 AI was used to:
