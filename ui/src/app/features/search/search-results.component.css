@@ -1,0 +1,73 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.info {
+  color: var(--muted);
+}
+
+.error {
+  border: 1px solid #fca5a5;
+  background: var(--danger-soft);
+  padding: 0.7rem;
+  border-radius: 8px;
+  color: var(--danger);
+}
+
+.offer-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.75rem;
+}
+
+.offer {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: var(--surface-soft);
+}
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.category {
+  background: #dbeafe;
+  color: #1e3a8a;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.name {
+  margin-top: 0.45rem;
+  margin-bottom: 0.6rem;
+}
+
+.total {
+  font-weight: 600;
+}
+
+button {
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  background: #fff;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+button.active {
+  background: var(--primary-soft);
+}

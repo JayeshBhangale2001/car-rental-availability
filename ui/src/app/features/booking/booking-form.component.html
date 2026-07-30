@@ -1,0 +1,47 @@
+<section class="panel">
+  <h2>Book Selected Offer</h2>
+
+  <div class="selected-offer">
+    <p><strong>Provider:</strong> {{ selectedOffer.provider }}</p>
+    <p><strong>Vehicle:</strong> {{ selectedOffer.vehicleName }}</p>
+    <p><strong>Category:</strong> {{ selectedOffer.category }}</p>
+    <p><strong>Total:</strong> {{ selectedOffer.currency }} {{ selectedOffer.totalPrice | number: '1.2-2' }}</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <label>
+      Driver name
+      <input type="text" formControlName="driverName" />
+    </label>
+
+    <label>
+      Document type
+      <select formControlName="documentType">
+        <option value="">Select</option>
+        <option value="NationalId">NationalId</option>
+        <option value="Passport">Passport</option>
+      </select>
+      <small>Expected for this pickup: {{ expectedDocumentType }}</small>
+    </label>
+
+    <label>
+      Document number
+      <input type="text" formControlName="documentNumber" />
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Booking...' : 'Confirm Booking' }}
+      </button>
+    </div>
+  </form>
+
+  <p class="field-error" *ngIf="localDocumentError">{{ localDocumentError }}</p>
+
+  <div class="error" *ngIf="errorMessage && !localDocumentError">
+    <p>{{ errorMessage }}</p>
+    <ul *ngIf="validationErrors.length > 0">
+      <li *ngFor="let issue of validationErrors">{{ issue.field }}: {{ issue.message }}</li>
+    </ul>
+  </div>
+</section>

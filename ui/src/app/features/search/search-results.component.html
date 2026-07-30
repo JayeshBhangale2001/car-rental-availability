@@ -1,0 +1,33 @@
+<section class="panel">
+  <h2>Available Offers</h2>
+
+  <p *ngIf="isLoading" class="info">Loading offers...</p>
+
+  <div class="error" *ngIf="errorMessage && !isLoading">
+    <p>{{ errorMessage }}</p>
+    <ul *ngIf="validationErrors.length > 0">
+      <li *ngFor="let issue of validationErrors">{{ issue.field }}: {{ issue.message }}</li>
+    </ul>
+  </div>
+
+  <p *ngIf="hasSearched && !isLoading && !errorMessage && offers.length === 0" class="info">
+    No available offers found for the selected criteria.
+  </p>
+
+  <div class="offer-list" *ngIf="!isLoading && offers.length > 0">
+    <article class="offer" *ngFor="let offer of offers">
+      <div class="top-row">
+        <strong>{{ offer.provider }}</strong>
+        <span class="category">{{ offer.category }}</span>
+      </div>
+      <p class="name">{{ offer.vehicleName }}</p>
+      <p>Per day: {{ offer.currency }} {{ offer.perDayRate | number: '1.2-2' }}</p>
+      <p class="total">Total: {{ offer.currency }} {{ offer.totalPrice | number: '1.2-2' }}</p>
+      <p>Cancellation: {{ offer.cancellationPolicy }}</p>
+      <p>Insurance: {{ offer.insuranceIncluded ? 'Included' : 'Not included' }}</p>
+      <button type="button" (click)="selectOffer(offer)" [class.active]="selectedOfferId === offer.offerId">
+        {{ selectedOfferId === offer.offerId ? 'Selected' : 'Select Offer' }}
+      </button>
+    </article>
+  </div>
+</section>

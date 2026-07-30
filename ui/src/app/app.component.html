@@ -1,0 +1,35 @@
+<main class="shell">
+  <header>
+    <h1>Car Rental Availability</h1>
+    <p>Search, book, and lookup car rentals using the backend contracts.</p>
+  </header>
+
+  <app-search-form (searchRequested)="onSearchRequested($event)"></app-search-form>
+
+  <app-search-results
+    [offers]="offers"
+    [hasSearched]="hasSearched"
+    [isLoading]="isSearching"
+    [errorMessage]="searchErrorMessage"
+    [validationErrors]="searchValidationErrors"
+    [selectedOfferId]="selectedOffer?.offerId ?? ''"
+    (offerSelected)="onOfferSelected($event)">
+  </app-search-results>
+
+  <app-booking-form
+    *ngIf="selectedOffer && lastSearchCriteria"
+    [selectedOffer]="selectedOffer"
+    [searchCriteria]="lastSearchCriteria"
+    [isSubmitting]="isBooking"
+    [errorMessage]="bookingErrorMessage"
+    [validationErrors]="bookingValidationErrors"
+    (bookingRequested)="onBookingRequested($event)">
+  </app-booking-form>
+
+  <app-booking-confirmation
+    *ngIf="confirmation"
+    [confirmation]="confirmation">
+  </app-booking-confirmation>
+
+  <app-booking-lookup [suggestedReference]="confirmation?.reference ?? ''"></app-booking-lookup>
+</main>

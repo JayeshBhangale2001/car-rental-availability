@@ -19,3 +19,8 @@ Key takeaways:
 - Integration tests were essential to confirm end-to-end contract behavior, not just unit-level logic.
 - Explicit OpenAPI metadata improves maintainability and makes review/demo easier.
 - Small iterative checks after each change prevented regressions and kept the solution aligned with the specification.
+
+Frontend reflection:
+- Copilot helped scaffold the Angular workspace quickly, generate standalone feature components, and wire the root flow for search, booking, confirmation, and booking lookup with minimal boilerplate.
+- Manual review was still required for strict TypeScript initialization details, form validation behavior, and clear UI messaging for API validation errors and not-found responses.
+- Integrating the UI with the API reinforced the value of stable DTO contracts: keeping frontend models aligned with backend responses made service integration straightforward and reduced mapping bugs.

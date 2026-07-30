@@ -1,0 +1,36 @@
+<section class="panel">
+  <h2>Search Cars</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <label>
+      Pickup location
+      <input type="text" formControlName="pickup" placeholder="Mumbai" />
+    </label>
+
+    <label>
+      Pickup date
+      <input type="date" formControlName="from" />
+    </label>
+
+    <label>
+      Return date
+      <input type="date" formControlName="to" />
+    </label>
+
+    <label>
+      Category (optional)
+      <select formControlName="category">
+        <option *ngFor="let category of categories" [value]="category">
+          {{ category || 'Any' }}
+        </option>
+      </select>
+    </label>
+
+    <div class="actions">
+      <button type="submit">Search</button>
+    </div>
+  </form>
+
+  <p class="field-error" *ngIf="form.hasError('dateOrder') && form.touched">
+    Return date must be after pickup date.
+  </p>
+</section>

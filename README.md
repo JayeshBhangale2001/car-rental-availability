@@ -8,6 +8,7 @@ This solution implements:
 - Car search across two stub providers
 - Booking creation with location/document business rules
 - Booking lookup by reference
+- Angular frontend for car search, booking, confirmation, and booking lookup
 
 Current backend scope is fully in-memory and does not require external services.
 
@@ -23,21 +24,56 @@ Layer responsibilities:
 - API layer: request parsing, HTTP status mapping, response contracts
 - Core layer: validation, provider orchestration, pricing logic, booking rules, storage
 - Providers: `PremiumDrive` and `BudgetWheels` stub inventories
+- Frontend (`ui/`): Angular UI flow for search, offer selection, booking, confirmation, and lookup
 
 ## Setup
 
 Prerequisites:
 - .NET SDK 8.0+
+- Node.js 18+ and npm
 
 Run locally:
 
 ```bash
+# backend
 cd src
 dotnet restore CarRental.sln
 dotnet run --project CarRental.Api
+
+# frontend (new terminal)
+cd ../ui
+npm install
+npm start
 ```
 
 Default local URLs are shown by ASP.NET at startup. Swagger UI is enabled.
+Angular dev server runs on `http://localhost:4200` by default.
+
+## Frontend
+
+Frontend overview:
+- Location: `ui/`
+- Purpose: thin UI over the existing backend contracts, with no additional business features
+- API models are reused from backend response/request shapes in `ui/src/app/core/models/car-rental.models.ts`
+
+Supported UI flow:
+- Search form
+- Available offers (sorted by total price ascending)
+- Select offer
+- Booking form
+- Confirmation with reference
+- Booking lookup
+
+Frontend technology:
+- Angular 18 (standalone components)
+- Reactive Forms for input handling and client-side validation
+- HttpClient for API integration
+
+Local API/proxy behavior:
+- Frontend calls relative `/cars/*` API paths
+- `ui/proxy.conf.json` proxies `/cars` to `http://localhost:5000`
+- `environment.apiBaseUrl` is empty (`''`) for local proxy-based calls
+- If backend runs on a different URL/port, update `ui/proxy.conf.json` target
 
 ## Supported Pickup Locations
 

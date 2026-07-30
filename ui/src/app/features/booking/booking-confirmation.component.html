@@ -1,0 +1,8 @@
+<section class="panel success">
+  <h2>Booking Confirmed</h2>
+  <p><strong>Reference:</strong> {{ confirmation.reference }}</p>
+  <p><strong>Provider:</strong> {{ confirmation.provider }}</p>
+  <p><strong>Category:</strong> {{ confirmation.category }}</p>
+  <p><strong>Total:</strong> INR {{ confirmation.totalPrice | number: '1.2-2' }}</p>
+  <p><strong>Cancellation:</strong> {{ confirmation.cancellationPolicy }}</p>
+</section>

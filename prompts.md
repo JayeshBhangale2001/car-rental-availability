@@ -367,6 +367,40 @@ Added endpoint names, summaries, descriptions, tags, typed response metadata, an
 
 Also added a typed not-found response for booking lookup.
 
+## 16. Frontend Implementation
+
+### Objective
+Implement the Angular UI flow for car search, booking, confirmation, and booking lookup using the existing API contracts.
+
+### Representative Prompt
+Review `spec.md`, the existing API contracts, and the current `ui` project.
+
+Build a simple UI for car search, booking, and booking lookup.
+
+Keep it clean and functional. Reuse the API response models, show validation errors clearly, and avoid adding unnecessary features.
+
+Before changing files, briefly explain the component structure and API service design.
+
+### Outcome
+Implemented the Angular frontend under `ui/` with standalone components and a thin API integration layer.
+
+Added reusable API models and service methods for search, booking, and booking lookup, including consistent parsing of validation and not-found error responses.
+
+Implemented the full UI flow:
+- Search form
+- Available offers list with ascending total-price sorting
+- Offer selection
+- Booking form with client-side document rule checks
+- Booking confirmation view with reference
+- Booking lookup by reference
+
+### Validation/Build Result
+Validated the frontend by installing dependencies and running the Angular build.
+
+Final frontend build result:
+- Angular Build: **Passed**
+- Output: `ui/dist/car-rental-ui`
+
 ## AI Usage Summary
 
 AI was used to:

@@ -1,0 +1,24 @@
+<section class="panel">
+  <h2>Booking Lookup</h2>
+  <form [formGroup]="form" (ngSubmit)="lookup()" class="lookup-form">
+    <label>
+      Booking reference
+      <input type="text" formControlName="reference" placeholder="BK-XXXX" />
+    </label>
+    <button type="submit" [disabled]="isLoading">{{ isLoading ? 'Searching...' : 'Lookup' }}</button>
+  </form>
+
+  <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <article *ngIf="booking" class="booking-card">
+    <p><strong>Reference:</strong> {{ booking.reference }}</p>
+    <p><strong>Provider:</strong> {{ booking.provider }}</p>
+    <p><strong>Driver:</strong> {{ booking.driverName }}</p>
+    <p><strong>Document:</strong> {{ booking.documentType }} ({{ booking.documentNumber }})</p>
+    <p><strong>Pickup:</strong> {{ booking.pickup }} ({{ booking.pickupLocationType }})</p>
+    <p><strong>Dates:</strong> {{ booking.from }} to {{ booking.to }}</p>
+    <p><strong>Vehicle:</strong> {{ booking.offer.vehicleName }} / {{ booking.offer.category }}</p>
+    <p><strong>Total:</strong> {{ booking.offer.currency }} {{ booking.offer.totalPrice | number: '1.2-2' }}</p>
+    <p><strong>Cancellation:</strong> {{ booking.offer.cancellationPolicy }}</p>
+  </article>
+</section>

@@ -1,0 +1,17 @@
+.panel {
+  border: 1px solid #86efac;
+  background: #ecfdf3;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #166534;
+  font-size: 1.1rem;
+}
+
+p {
+  margin: 0.3rem 0;
+}
