@@ -211,6 +211,61 @@ Added unit tests for date boundaries, flat pricing, weekend surcharges, mixed re
 
 One incorrect test expectation was identified during execution, reviewed, and corrected. All 13 tests passed successfully.
 
+## 10. Provider Stubs and Offer Mapping
+
+### Objective
+Implement deterministic provider integrations that return normalized rental offers using the provider-specific pricing rules.
+
+### Representative Prompt
+Pricing logic is completed and the tests are passing.
+
+Please implement the PremiumDrive and BudgetWheels provider stubs using the existing `ICarRentalProvider` contract.
+
+Each provider should receive its matching concrete pricing calculator in the constructor.
+
+Keep the fixed vehicle data separate from `CarOffer` by using a small private record or class inside each provider.
+
+When `SearchAsync` is called:
+
+- apply category filtering only when a category is supplied,
+- map the fixed vehicle data into `CarOffer`,
+- calculate the total price using the provider pricing calculator,
+- populate the provider-specific insurance, cancellation policy, currency, and availability.
+
+PremiumDrive should always return available offers.
+
+BudgetWheels should return both available and unavailable offers. Do not filter unavailable offers inside the provider because that will be handled by the search service later.
+
+Add focused unit tests for mapping, category filtering, provider-specific totals, insurance, cancellation policy, and availability.
+
+Do not implement search orchestration, booking, validation, storage, endpoints, or frontend code yet.
+
+### Outcome
+Created deterministic provider stubs for PremiumDrive and BudgetWheels.
+
+Each provider now maps private fixed vehicle data into normalized `CarOffer` results and calculates totals using its matching pricing calculator.
+
+PremiumDrive returns only available offers, while BudgetWheels preserves both available and unavailable offers for later filtering by the search service.
+
+## 11. Search Orchestration
+
+### Objective
+Combine rental offers from all providers and return only available offers sorted by total price.
+
+### Representative Prompt
+Review `spec.md` and the existing provider contracts.
+
+Implement the search orchestration layer using `ICarSearchService` and `CarSearchService`.
+
+The service should call all registered providers with `Task.WhenAll`, combine the results, remove unavailable offers, sort by `TotalPrice`, and return the final list.
+
+Keep the service provider-agnostic and add focused unit tests using fake providers.
+
+### Outcome
+Created a provider-agnostic search service that calls all rental providers in parallel, combines their results, removes unavailable offers, and sorts the remaining offers by total price.
+
+Added unit tests for result aggregation, availability filtering, sorting, empty results, cancellation-token forwarding, and provider exception propagation.
+
 ## AI Usage Summary
 
 AI was used to:
