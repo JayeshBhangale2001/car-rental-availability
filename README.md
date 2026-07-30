@@ -60,8 +60,8 @@ Matching is case-insensitive after trimming input.
 
 - Method/Path: `GET /cars/search`
 - Query:
-	- Required: `pickup`, `from`, `to`
-	- Optional: `category` (`Economy|Compact|SUV|Minivan`)
+  - Required: `pickup`, `from`, `to`
+  - Optional: `category` (`Economy|Compact|SUV|Minivan`)
 - Success: `200 OK`
 - Main errors: `400 Bad Request`
 
@@ -71,8 +71,8 @@ Matching is case-insensitive after trimming input.
 - Body includes selected offer context plus driver/document/rental details
 - Success: `201 Created`
 - Main errors:
-	- `400 Bad Request` for invalid input/search context
-	- `422 Unprocessable Entity` for document rule mismatch
+  - `400 Bad Request` for invalid input/search context
+  - `422 Unprocessable Entity` for document rule mismatch
 
 Document business rule:
 - Domestic pickup requires `NationalId`
@@ -96,17 +96,17 @@ Book:
 
 ```bash
 curl -X POST "http://localhost:5000/cars/book" \
-	-H "Content-Type: application/json" \
-	-d '{
-		"provider": "PremiumDrive",
-		"offerId": "PD-ECON-001",
-		"driverName": "Jayesh",
-		"documentType": "NationalId",
-		"documentNumber": "NID-12345",
-		"pickup": "Mumbai",
-		"from": "2026-07-01",
-		"to": "2026-07-04"
-	}'
+  -H "Content-Type: application/json" \
+  -d '{
+    "provider": "PremiumDrive",
+    "offerId": "PD-ECON-001",
+    "driverName": "Jayesh",
+    "documentType": "NationalId",
+    "documentNumber": "NID-12345",
+    "pickup": "Mumbai",
+    "from": "2026-07-01",
+    "to": "2026-07-04"
+  }'
 ```
 
 Lookup:

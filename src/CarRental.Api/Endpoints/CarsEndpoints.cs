@@ -1,13 +1,15 @@
+using System.Globalization;
 using CarRental.Api.Contracts;
 using CarRental.Core.Domain;
 using CarRental.Core.Services;
 using CarRental.Core.Validation;
-using System.Globalization;
 
 namespace CarRental.Api.Endpoints;
 
 public static class CarsEndpoints
 {
+    private const string DateFormat = "yyyy-MM-dd";
+
     public static RouteGroupBuilder MapCarsEndpoints(this IEndpointRouteBuilder app)
     {
         var cars = app.MapGroup("/cars")
@@ -255,7 +257,7 @@ public static class CarsEndpoints
             return false;
         }
 
-        if (!DateOnly.TryParseExact(value.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+        if (!DateOnly.TryParseExact(value.Trim(), DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
         {
             error = "Date is invalid and must use YYYY-MM-DD format.";
             return false;

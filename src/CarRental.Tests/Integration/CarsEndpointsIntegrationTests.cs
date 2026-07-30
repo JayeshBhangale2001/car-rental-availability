@@ -11,8 +11,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task Search_Returns200AndOffers_WhenRequestIsValid()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var response = await client.GetAsync("/cars/search?pickup=Mumbai&from=2026-07-01&to=2026-07-04");
 
@@ -26,8 +26,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task Search_Returns400_WhenDateRangeIsInvalid()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var response = await client.GetAsync("/cars/search?pickup=Mumbai&from=2026-07-04&to=2026-07-04");
 
@@ -41,8 +41,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task Book_Returns201_WhenRequestIsValid()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var selectedOffer = await GetFirstOfferAsync(client, "Mumbai", "2026-07-01", "2026-07-04");
 
@@ -70,8 +70,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task Book_Returns400_WhenPickupLocationIsUnsupported()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var request = new
         {
@@ -97,8 +97,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task Book_Returns422_WhenDocumentTypeViolatesPickupRule()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var selectedOffer = await GetFirstOfferAsync(client, "Mumbai", "2026-07-01", "2026-07-04");
 
@@ -126,8 +126,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task BookingLookup_Returns200_WhenReferenceExists()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var selectedOffer = await GetFirstOfferAsync(client, "Mumbai", "2026-07-01", "2026-07-04");
         var bookRequest = new
@@ -154,8 +154,8 @@ public class CarsEndpointsIntegrationTests
     [Fact]
     public async Task BookingLookup_Returns404_WhenReferenceDoesNotExist()
     {
-        using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
 
         var response = await client.GetAsync("/cars/booking/BK-DOES-NOT-EXIST");
 
@@ -179,5 +179,31 @@ public class CarsEndpointsIntegrationTests
         return (
             Provider: firstOffer.GetProperty("provider").GetString()!,
             OfferId: firstOffer.GetProperty("offerId").GetString()!);
+    }
+
+    private static TestClientContext CreateTestClient()
+    {
+        var factory = new WebApplicationFactory<Program>();
+        var client = factory.CreateClient();
+        return new TestClientContext(factory, client);
+    }
+
+    private sealed class TestClientContext : IDisposable
+    {
+        private readonly WebApplicationFactory<Program> factory;
+
+        public TestClientContext(WebApplicationFactory<Program> factory, HttpClient client)
+        {
+            this.factory = factory;
+            Client = client;
+        }
+
+        public HttpClient Client { get; }
+
+        public void Dispose()
+        {
+            Client.Dispose();
+            factory.Dispose();
+        }
     }
 }
