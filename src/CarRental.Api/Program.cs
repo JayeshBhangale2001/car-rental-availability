@@ -8,6 +8,9 @@ using CarRental.Core.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<BudgetWheelsPricingCalculator>();
 builder.Services.AddSingleton<PremiumDrivePricingCalculator>();
 
@@ -23,6 +26,9 @@ builder.Services.AddSingleton<IBookingReferenceGenerator, GuidBookingReferenceGe
 builder.Services.AddSingleton<IBookingService, BookingService>();
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapGet("/", () => "Car Rental API");
 app.MapCarsEndpoints();

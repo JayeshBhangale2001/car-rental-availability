@@ -10,11 +10,31 @@ public static class CarsEndpoints
 {
     public static RouteGroupBuilder MapCarsEndpoints(this IEndpointRouteBuilder app)
     {
-        var cars = app.MapGroup("/cars");
+        var cars = app.MapGroup("/cars")
+            .WithTags("Cars");
 
-        cars.MapGet("/search", SearchAsync);
-        cars.MapPost("/book", BookAsync);
-        cars.MapGet("/booking/{reference}", GetBookingByReferenceAsync);
+        cars.MapGet("/search", SearchAsync)
+            .WithName("SearchCars")
+            .WithSummary("Search available rental cars")
+            .WithDescription("Queries providers and returns normalized, price-sorted available offers.")
+            .Produces<SearchCarResponseDto[]>(StatusCodes.Status200OK)
+            .Produces<ApiValidationErrorResponseDto>(StatusCodes.Status400BadRequest);
+
+        cars.MapPost("/book", BookAsync)
+            .WithName("BookCar")
+            .WithSummary("Create a booking for a selected offer")
+            .WithDescription("Validates input and document rules, then creates a booking with a generated reference.")
+            .Produces<BookingConfirmationResponseDto>(StatusCodes.Status201Created)
+            .Produces<ApiValidationErrorResponseDto>(StatusCodes.Status400BadRequest)
+            .Produces<ApiValidationErrorResponseDto>(StatusCodes.Status422UnprocessableEntity);
+
+        cars.MapGet("/booking/{reference}", GetBookingByReferenceAsync)
+            .WithName("GetBookingByReference")
+            .WithSummary("Get booking details by reference")
+            .WithDescription("Returns booking details when the reference exists.")
+            .Produces<BookingDetailsResponseDto>(StatusCodes.Status200OK)
+            .Produces<ApiValidationErrorResponseDto>(StatusCodes.Status400BadRequest)
+            .Produces<BookingNotFoundResponseDto>(StatusCodes.Status404NotFound);
 
         return cars;
     }
@@ -193,10 +213,7 @@ public static class CarsEndpoints
         var booking = await bookingService.GetBookingByReferenceAsync(reference, cancellationToken);
         if (booking is null)
         {
-            return Results.NotFound(new
-            {
-                message = "Booking reference was not found."
-            });
+            return Results.NotFound(new BookingNotFoundResponseDto("Booking reference was not found."));
         }
 
         var response = new BookingDetailsResponseDto

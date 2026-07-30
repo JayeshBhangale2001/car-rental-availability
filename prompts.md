@@ -348,6 +348,24 @@ Final test results:
 - Unit + Integration Tests: **57 Passed**
 - **0 Failed**
 
+## 15. Swagger and OpenAPI
+
+### Objective
+Document the API endpoints and response contracts.
+
+### Representative Prompt
+Add Swagger/OpenAPI support to the API.
+
+Include clear endpoint names, response types, and status codes for search, booking, and booking lookup.
+
+Keep the changes limited to API configuration and endpoint metadata.
+
+### Outcome
+Enabled Swagger UI and OpenAPI generation.
+
+Added endpoint names, summaries, descriptions, tags, typed response metadata, and status-code documentation for all three API routes.
+
+Also added a typed not-found response for booking lookup.
 
 ## AI Usage Summary
 

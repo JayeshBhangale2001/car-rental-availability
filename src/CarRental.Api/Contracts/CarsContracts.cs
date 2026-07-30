@@ -120,3 +120,6 @@ public sealed record ApiValidationIssueDto(
 
 public sealed record ApiValidationErrorResponseDto(
     IReadOnlyList<ApiValidationIssueDto> Errors);
+
+public sealed record BookingNotFoundResponseDto(
+    string Message);
