@@ -259,6 +259,31 @@ Implement the search orchestration layer using `ICarSearchService` and `CarSearc
 
 The service should call all registered providers with `Task.WhenAll`, combine the results, remove unavailable offers, sort by `TotalPrice`, and return the final list.
 
+## 12. Angular UI Test Coverage and Test Runner Setup
+
+### Objective
+Add focused unit coverage for the main Angular user flow and make the suite easy to run locally.
+
+### Representative Prompt
+Review the Angular components in the `ui` project and add small, meaningful unit tests for the main user flow.
+
+Cover the search form, search results, booking form, booking confirmation, and booking lookup.
+
+Focus on form validation, emitted events, basic rendering, and important error states.
+
+Keep the tests simple and follow the existing Angular setup.
+
+Also add a dedicated script like `test:ci` to `ui/package.json` so the suite can be run with one short command.
+
+### Outcome
+Added standalone Angular component specs for the main search, booking, confirmation, and booking lookup flow.
+
+Added Angular test runner setup for the UI workspace, including Jasmine/Karma configuration and required dev dependencies.
+
+Added `npm run test:ci` as the standard command for one-shot frontend test execution.
+
+Resolved a reactive-forms warning by moving the pickup selector disabled state into the form control instead of binding the `disabled` attribute in the template.
+
 Keep the service provider-agnostic and add focused unit tests using fake providers.
 
 ### Outcome

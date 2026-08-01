@@ -3,7 +3,7 @@
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <label>
       Pickup location
-      <select formControlName="pickup" [disabled]="isLoadingPickupLocations || pickupLocations.length === 0">
+      <select formControlName="pickup">
         <option value="">Select a pickup location</option>
         <optgroup label="Domestic" *ngIf="domesticPickupLocations.length > 0">
           <option *ngFor="let location of domesticPickupLocations" [value]="location.name">

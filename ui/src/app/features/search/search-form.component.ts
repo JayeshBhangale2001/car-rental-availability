@@ -24,18 +24,38 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
 })
 export class SearchFormComponent {
   @Input() isSearching = false;
-  @Input() pickupLocations: PickupLocationResponseDto[] = [];
-  @Input() isLoadingPickupLocations = false;
+  @Input()
+  set pickupLocations(value: PickupLocationResponseDto[]) {
+    this._pickupLocations = value;
+    this.syncPickupControlState();
+  }
+
+  get pickupLocations(): PickupLocationResponseDto[] {
+    return this._pickupLocations;
+  }
+
+  @Input()
+  set isLoadingPickupLocations(value: boolean) {
+    this._isLoadingPickupLocations = value;
+    this.syncPickupControlState();
+  }
+
+  get isLoadingPickupLocations(): boolean {
+    return this._isLoadingPickupLocations;
+  }
+
   @Input() pickupLocationsErrorMessage = '';
 
   @Output() readonly searchRequested = new EventEmitter<SearchCarsRequestDto>();
   private readonly formBuilder = inject(FormBuilder);
+  private _pickupLocations: PickupLocationResponseDto[] = [];
+  private _isLoadingPickupLocations = false;
 
   readonly categories = ['', 'Economy', 'Compact', 'SUV', 'Minivan'];
 
   readonly form = this.formBuilder.group(
     {
-      pickup: ['', [Validators.required, trimmedRequiredValidator]],
+      pickup: this.formBuilder.control({ value: '', disabled: true }, [Validators.required, trimmedRequiredValidator]),
       from: ['', Validators.required],
       to: ['', Validators.required],
       category: ['']
@@ -49,6 +69,19 @@ export class SearchFormComponent {
 
   get internationalPickupLocations(): PickupLocationResponseDto[] {
     return this.pickupLocations.filter(location => location.locationType === 'International');
+  }
+
+  private syncPickupControlState(): void {
+    const pickupControl = this.form.controls.pickup;
+    const shouldDisable = this.isLoadingPickupLocations || this.pickupLocations.length === 0;
+
+    if (shouldDisable) {
+      pickupControl.disable({ emitEvent: false });
+      pickupControl.setValue('', { emitEvent: false });
+      return;
+    }
+
+    pickupControl.enable({ emitEvent: false });
   }
 
   submit(): void {

@@ -185,3 +185,22 @@ curl "http://localhost:5000/cars/booking/BK-EXAMPLE123"
 cd src
 dotnet test CarRental.sln -v minimal
 ```
+
+Frontend tests:
+
+```bash
+cd ui
+npm run test:ci
+```
+
+Notes:
+- `test:ci` runs Angular unit tests once in headless mode using `ng test --watch=false --browsers=ChromeHeadless --progress=false`
+- On machines without Google Chrome installed, set `CHROME_BIN` to a Chromium-based browser such as Microsoft Edge before running the command
+
+Example on Windows:
+
+```powershell
+$env:CHROME_BIN = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
+cd ui
+npm run test:ci
+```
