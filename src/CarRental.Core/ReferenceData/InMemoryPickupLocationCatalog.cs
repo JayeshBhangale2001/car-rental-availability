@@ -1,8 +1,8 @@
 using CarRental.Core.Domain;
 
-namespace CarRental.Core.Validation;
+namespace CarRental.Core.ReferenceData;
 
-public static class SupportedPickupLocations
+public sealed class InMemoryPickupLocationCatalog : IPickupLocationCatalog
 {
     private static readonly string[] DomesticLocationNames =
     {
@@ -21,22 +21,11 @@ public static class SupportedPickupLocations
 
     private static readonly HashSet<string> InternationalLocations = new(InternationalLocationNames, StringComparer.OrdinalIgnoreCase);
 
-    public static IReadOnlyList<string> GetDomesticLocations() => DomesticLocationNames;
+    public IReadOnlyList<string> GetDomesticLocations() => DomesticLocationNames;
 
-    public static IReadOnlyList<string> GetInternationalLocations() => InternationalLocationNames;
+    public IReadOnlyList<string> GetInternationalLocations() => InternationalLocationNames;
 
-    public static bool IsSupported(string location)
-    {
-        var normalized = Normalize(location);
-        if (normalized is null)
-        {
-            return false;
-        }
-
-        return DomesticLocations.Contains(normalized) || InternationalLocations.Contains(normalized);
-    }
-
-    public static bool TryGetLocationType(string location, out PickupLocationType locationType)
+    public bool TryGetLocationType(string location, out PickupLocationType locationType)
     {
         var normalized = Normalize(location);
         if (normalized is null)

@@ -1,11 +1,14 @@
 using CarRental.Core.Domain;
+using CarRental.Core.ReferenceData;
 using CarRental.Core.Validation;
 
 namespace CarRental.Tests.Unit;
 
 public class BookingValidatorTests
 {
-    private readonly BookingValidator validator = new();
+    private readonly BookingValidator validator = new(
+        new InMemoryPickupLocationCatalog(),
+        new InMemoryDocumentTypeRuleCatalog());
 
     [Fact]
     public void Validate_ValidDomesticBookingWithNationalId_ReturnsSuccess()

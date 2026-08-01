@@ -1,6 +1,7 @@
 using CarRental.Core.Domain;
 using CarRental.Core.Pricing;
 using CarRental.Core.Providers;
+using CarRental.Core.ReferenceData;
 
 namespace CarRental.Tests.Unit;
 
@@ -9,7 +10,7 @@ public class BudgetWheelsProviderTests
     [Fact]
     public async Task SearchAsync_ReturnsNonRefundableCancellationPolicyForAllOffers()
     {
-        var provider = new BudgetWheelsProvider(new BudgetWheelsPricingCalculator());
+        var provider = new BudgetWheelsProvider(new BudgetWheelsPricingCalculator(), new BudgetWheelsCatalog());
 
         var offers = await provider.SearchAsync(new SearchCriteria
         {
@@ -26,7 +27,7 @@ public class BudgetWheelsProviderTests
     [Fact]
     public async Task SearchAsync_WhenCategoryIsNotSpecified_ReturnsAvailableAndUnavailableOffers()
     {
-        var provider = new BudgetWheelsProvider(new BudgetWheelsPricingCalculator());
+        var provider = new BudgetWheelsProvider(new BudgetWheelsPricingCalculator(), new BudgetWheelsCatalog());
 
         var offers = await provider.SearchAsync(new SearchCriteria
         {
@@ -45,7 +46,7 @@ public class BudgetWheelsProviderTests
     [Fact]
     public async Task SearchAsync_WhenCategoryIsSpecified_ReturnsOnlyMatchingBudgetWheelsOffer()
     {
-        var provider = new BudgetWheelsProvider(new BudgetWheelsPricingCalculator());
+        var provider = new BudgetWheelsProvider(new BudgetWheelsPricingCalculator(), new BudgetWheelsCatalog());
 
         var offers = await provider.SearchAsync(new SearchCriteria
         {

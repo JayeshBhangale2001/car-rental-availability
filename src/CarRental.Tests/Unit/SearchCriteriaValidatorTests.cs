@@ -1,11 +1,12 @@
 using CarRental.Core.Domain;
+using CarRental.Core.ReferenceData;
 using CarRental.Core.Validation;
 
 namespace CarRental.Tests.Unit;
 
 public class SearchCriteriaValidatorTests
 {
-    private readonly SearchCriteriaValidator validator = new();
+    private readonly SearchCriteriaValidator validator = new(new InMemoryPickupLocationCatalog());
 
     [Fact]
     public void Validate_ValidDomesticCriteria_ReturnsSuccess()

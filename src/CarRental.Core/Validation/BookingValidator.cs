@@ -1,9 +1,21 @@
 using CarRental.Core.Domain;
+using CarRental.Core.ReferenceData;
 
 namespace CarRental.Core.Validation;
 
 public sealed class BookingValidator : IValidator<Booking>
 {
+    private readonly IPickupLocationCatalog pickupLocationCatalog;
+    private readonly IDocumentTypeRuleCatalog documentTypeRuleCatalog;
+
+    public BookingValidator(
+        IPickupLocationCatalog pickupLocationCatalog,
+        IDocumentTypeRuleCatalog documentTypeRuleCatalog)
+    {
+        this.pickupLocationCatalog = pickupLocationCatalog;
+        this.documentTypeRuleCatalog = documentTypeRuleCatalog;
+    }
+
     public ValidationResult Validate(Booking model)
     {
         ArgumentNullException.ThrowIfNull(model);
@@ -56,7 +68,7 @@ public sealed class BookingValidator : IValidator<Booking>
         }
         else
         {
-            if (!SupportedPickupLocations.TryGetLocationType(model.PickupLocation, out var expectedType))
+            if (!pickupLocationCatalog.TryGetLocationType(model.PickupLocation, out var expectedType))
             {
                 issues.Add(new ValidationIssue(
                     ValidationIssueKind.Input,
@@ -75,15 +87,13 @@ public sealed class BookingValidator : IValidator<Booking>
                         "Pickup location type does not match the selected pickup location."));
                 }
 
-                if (!IsDocumentTypeValidForPickupType(model.DocumentType, expectedType))
+                if (!documentTypeRuleCatalog.IsDocumentTypeValidForPickupType(model.DocumentType, expectedType))
                 {
                     issues.Add(new ValidationIssue(
                         ValidationIssueKind.BusinessRule,
                         "documentType",
                         "booking.document.mismatch",
-                        expectedType == PickupLocationType.Domestic
-                            ? "Domestic pickup requires National ID."
-                            : "International pickup requires Passport."));
+                        documentTypeRuleCatalog.GetDocumentMismatchMessage(expectedType)));
                 }
             }
         }
@@ -100,15 +110,5 @@ public sealed class BookingValidator : IValidator<Booking>
         return issues.Count == 0
             ? ValidationResult.Success()
             : ValidationResult.Failure(issues);
-    }
-
-    private static bool IsDocumentTypeValidForPickupType(DocumentType documentType, PickupLocationType pickupLocationType)
-    {
-        return pickupLocationType switch
-        {
-            PickupLocationType.Domestic => documentType == DocumentType.NationalId,
-            PickupLocationType.International => documentType == DocumentType.Passport,
-            _ => false
-        };
     }
 }

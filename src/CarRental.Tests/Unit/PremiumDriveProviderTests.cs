@@ -1,6 +1,7 @@
 using CarRental.Core.Domain;
 using CarRental.Core.Pricing;
 using CarRental.Core.Providers;
+using CarRental.Core.ReferenceData;
 
 namespace CarRental.Tests.Unit;
 
@@ -9,7 +10,7 @@ public class PremiumDriveProviderTests
     [Fact]
     public async Task SearchAsync_ReturnsFreeCancellationPolicyForAllOffers()
     {
-        var provider = new PremiumDriveProvider(new PremiumDrivePricingCalculator());
+        var provider = new PremiumDriveProvider(new PremiumDrivePricingCalculator(), new PremiumDriveCatalog());
 
         var offers = await provider.SearchAsync(new SearchCriteria
         {
@@ -28,7 +29,7 @@ public class PremiumDriveProviderTests
     [Fact]
     public async Task SearchAsync_WhenCategoryIsNotSpecified_ReturnsAllAvailableOffers()
     {
-        var provider = new PremiumDriveProvider(new PremiumDrivePricingCalculator());
+        var provider = new PremiumDriveProvider(new PremiumDrivePricingCalculator(), new PremiumDriveCatalog());
 
         var offers = await provider.SearchAsync(new SearchCriteria
         {
@@ -46,7 +47,7 @@ public class PremiumDriveProviderTests
     [Fact]
     public async Task SearchAsync_WhenCategoryIsSpecified_ReturnsOnlyMatchingOffers()
     {
-        var provider = new PremiumDriveProvider(new PremiumDrivePricingCalculator());
+        var provider = new PremiumDriveProvider(new PremiumDrivePricingCalculator(), new PremiumDriveCatalog());
 
         var offers = await provider.SearchAsync(new SearchCriteria
         {

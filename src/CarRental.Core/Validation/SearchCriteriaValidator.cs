@@ -1,9 +1,17 @@
 using CarRental.Core.Domain;
+using CarRental.Core.ReferenceData;
 
 namespace CarRental.Core.Validation;
 
 public sealed class SearchCriteriaValidator : IValidator<SearchCriteria>
 {
+    private readonly IPickupLocationCatalog pickupLocationCatalog;
+
+    public SearchCriteriaValidator(IPickupLocationCatalog pickupLocationCatalog)
+    {
+        this.pickupLocationCatalog = pickupLocationCatalog;
+    }
+
     public ValidationResult Validate(SearchCriteria model)
     {
         ArgumentNullException.ThrowIfNull(model);
@@ -20,7 +28,7 @@ public sealed class SearchCriteriaValidator : IValidator<SearchCriteria>
         }
         else
         {
-            if (!SupportedPickupLocations.TryGetLocationType(model.PickupLocation, out var expectedType))
+            if (!pickupLocationCatalog.TryGetLocationType(model.PickupLocation, out var expectedType))
             {
                 issues.Add(new ValidationIssue(
                     ValidationIssueKind.Input,

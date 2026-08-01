@@ -2,6 +2,7 @@ using CarRental.Api.Endpoints;
 using CarRental.Core.Domain;
 using CarRental.Core.Pricing;
 using CarRental.Core.Providers;
+using CarRental.Core.ReferenceData;
 using CarRental.Core.Services;
 using CarRental.Core.Storage;
 using CarRental.Core.Validation;
@@ -13,6 +14,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<BudgetWheelsPricingCalculator>();
 builder.Services.AddSingleton<PremiumDrivePricingCalculator>();
+builder.Services.AddSingleton<IPickupLocationCatalog, InMemoryPickupLocationCatalog>();
+builder.Services.AddSingleton<IDocumentTypeRuleCatalog, InMemoryDocumentTypeRuleCatalog>();
+builder.Services.AddSingleton<BudgetWheelsCatalog>();
+builder.Services.AddSingleton<PremiumDriveCatalog>();
 
 builder.Services.AddSingleton<ICarRentalProvider, BudgetWheelsProvider>();
 builder.Services.AddSingleton<ICarRentalProvider, PremiumDriveProvider>();

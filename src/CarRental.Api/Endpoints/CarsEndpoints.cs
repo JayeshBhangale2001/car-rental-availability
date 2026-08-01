@@ -1,6 +1,7 @@
 using System.Globalization;
 using CarRental.Api.Contracts;
 using CarRental.Core.Domain;
+using CarRental.Core.ReferenceData;
 using CarRental.Core.Services;
 using CarRental.Core.Validation;
 
@@ -47,16 +48,16 @@ public static class CarsEndpoints
         return cars;
     }
 
-    private static IResult GetPickupLocations()
+    private static IResult GetPickupLocations(IPickupLocationCatalog pickupLocationCatalog)
     {
-        var domestic = SupportedPickupLocations.GetDomesticLocations()
+        var domestic = pickupLocationCatalog.GetDomesticLocations()
             .Select(location => new PickupLocationResponseDto
             {
                 Name = location,
                 LocationType = PickupLocationType.Domestic.ToString()
             });
 
-        var international = SupportedPickupLocations.GetInternationalLocations()
+        var international = pickupLocationCatalog.GetInternationalLocations()
             .Select(location => new PickupLocationResponseDto
             {
                 Name = location,
@@ -68,6 +69,7 @@ public static class CarsEndpoints
 
     private static async Task<IResult> SearchAsync(
         [AsParameters] SearchCarsRequestDto request,
+        IPickupLocationCatalog pickupLocationCatalog,
         ICarSearchService carSearchService,
         IValidator<SearchCriteria> searchValidator,
         CancellationToken cancellationToken)
@@ -92,7 +94,7 @@ public static class CarsEndpoints
             return BadRequest("category", "search.category.invalid", categoryError);
         }
 
-        var hasPickupType = SupportedPickupLocations.TryGetLocationType(request.Pickup, out var pickupLocationType);
+        var hasPickupType = pickupLocationCatalog.TryGetLocationType(request.Pickup, out var pickupLocationType);
         var criteria = new SearchCriteria
         {
             PickupLocation = request.Pickup.Trim(),
@@ -129,6 +131,7 @@ public static class CarsEndpoints
 
     private static async Task<IResult> BookAsync(
         BookCarRequestDto request,
+        IPickupLocationCatalog pickupLocationCatalog,
         ICarSearchService carSearchService,
         IValidator<SearchCriteria> searchValidator,
         IBookingService bookingService,
@@ -164,7 +167,7 @@ public static class CarsEndpoints
             return BadRequest("documentType", "booking.document.typeInvalid", documentTypeError);
         }
 
-        var hasPickupType = SupportedPickupLocations.TryGetLocationType(request.Pickup, out var pickupLocationType);
+        var hasPickupType = pickupLocationCatalog.TryGetLocationType(request.Pickup, out var pickupLocationType);
         var searchCriteria = new SearchCriteria
         {
             PickupLocation = request.Pickup.Trim(),
