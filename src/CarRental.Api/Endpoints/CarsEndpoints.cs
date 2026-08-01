@@ -15,6 +15,12 @@ public static class CarsEndpoints
         var cars = app.MapGroup("/cars")
             .WithTags("Cars");
 
+        cars.MapGet("/pickup-locations", GetPickupLocations)
+            .WithName("GetPickupLocations")
+            .WithSummary("Get supported pickup locations")
+            .WithDescription("Returns all supported pickup locations grouped by location type.")
+            .Produces<PickupLocationResponseDto[]>(StatusCodes.Status200OK);
+
         cars.MapGet("/search", SearchAsync)
             .WithName("SearchCars")
             .WithSummary("Search available rental cars")
@@ -39,6 +45,25 @@ public static class CarsEndpoints
             .Produces<BookingNotFoundResponseDto>(StatusCodes.Status404NotFound);
 
         return cars;
+    }
+
+    private static IResult GetPickupLocations()
+    {
+        var domestic = SupportedPickupLocations.GetDomesticLocations()
+            .Select(location => new PickupLocationResponseDto
+            {
+                Name = location,
+                LocationType = PickupLocationType.Domestic.ToString()
+            });
+
+        var international = SupportedPickupLocations.GetInternationalLocations()
+            .Select(location => new PickupLocationResponseDto
+            {
+                Name = location,
+                LocationType = PickupLocationType.International.ToString()
+            });
+
+        return Results.Ok(domestic.Concat(international).ToArray());
     }
 
     private static async Task<IResult> SearchAsync(

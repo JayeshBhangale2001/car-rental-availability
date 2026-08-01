@@ -4,18 +4,26 @@ namespace CarRental.Core.Validation;
 
 public static class SupportedPickupLocations
 {
-    private static readonly HashSet<string> DomesticLocations = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly string[] DomesticLocationNames =
     {
         "Mumbai",
         "Delhi"
     };
 
-    private static readonly HashSet<string> InternationalLocations = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly string[] InternationalLocationNames =
     {
         "Dubai",
         "London",
         "Singapore"
     };
+
+    private static readonly HashSet<string> DomesticLocations = new(DomesticLocationNames, StringComparer.OrdinalIgnoreCase);
+
+    private static readonly HashSet<string> InternationalLocations = new(InternationalLocationNames, StringComparer.OrdinalIgnoreCase);
+
+    public static IReadOnlyList<string> GetDomesticLocations() => DomesticLocationNames;
+
+    public static IReadOnlyList<string> GetInternationalLocations() => InternationalLocationNames;
 
     public static bool IsSupported(string location)
     {

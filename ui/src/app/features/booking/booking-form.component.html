@@ -12,6 +12,9 @@
     <label>
       Driver name
       <input type="text" formControlName="driverName" />
+      <p class="field-error" *ngIf="form.controls.driverName.touched && (form.controls.driverName.hasError('required') || form.controls.driverName.hasError('trimmedRequired'))">
+        Driver name is required.
+      </p>
     </label>
 
     <label>
@@ -21,16 +24,22 @@
         <option value="NationalId">NationalId</option>
         <option value="Passport">Passport</option>
       </select>
-      <small>Expected for this pickup: {{ expectedDocumentType }}</small>
+      <p class="field-error" *ngIf="form.controls.documentType.touched && form.controls.documentType.hasError('required')">
+        Document type is required.
+      </p>
+      <small *ngIf="expectedDocumentType">Expected for this pickup: {{ expectedDocumentType }}</small>
     </label>
 
     <label>
       Document number
       <input type="text" formControlName="documentNumber" />
+      <p class="field-error" *ngIf="form.controls.documentNumber.touched && (form.controls.documentNumber.hasError('required') || form.controls.documentNumber.hasError('trimmedRequired'))">
+        Document number is required.
+      </p>
     </label>
 
     <div class="actions">
-      <button type="submit" [disabled]="isSubmitting">
+      <button type="submit" [disabled]="form.invalid || isSubmitting">
         {{ isSubmitting ? 'Booking...' : 'Confirm Booking' }}
       </button>
     </div>

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
     ApiValidationIssueDto,
     BookCarRequestDto,
     BookingConfirmationResponseDto,
+    PickupLocationResponseDto,
     SearchCarResponseDto,
     SearchCarsRequestDto
 } from './core/models/car-rental.models';
@@ -28,12 +29,16 @@ import { SearchResultsComponent } from './features/search/search-results.compone
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   hasSearched = false;
   isSearching = false;
   offers: SearchCarResponseDto[] = [];
   selectedOffer: SearchCarResponseDto | null = null;
   lastSearchCriteria: SearchCarsRequestDto | null = null;
+
+  pickupLocations: PickupLocationResponseDto[] = [];
+  isLoadingPickupLocations = true;
+  pickupLocationsErrorMessage = '';
 
   searchErrorMessage = '';
   searchValidationErrors: ApiValidationIssueDto[] = [];
@@ -44,6 +49,22 @@ export class AppComponent {
   confirmation: BookingConfirmationResponseDto | null = null;
 
   constructor(private readonly apiService: CarRentalApiService) {}
+
+  ngOnInit(): void {
+    this.apiService.getPickupLocations().subscribe({
+      next: (locations) => {
+        this.pickupLocations = locations;
+        this.isLoadingPickupLocations = false;
+        this.pickupLocationsErrorMessage = '';
+      },
+      error: (error: unknown) => {
+        const parsed = this.apiService.toApiClientError(error);
+        this.pickupLocations = [];
+        this.isLoadingPickupLocations = false;
+        this.pickupLocationsErrorMessage = parsed.message;
+      }
+    });
+  }
 
   onSearchRequested(criteria: SearchCarsRequestDto): void {
     this.hasSearched = true;

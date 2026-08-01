@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
     ApiValidationIssueDto,
     BookCarRequestDto,
     SearchCarResponseDto,
     SearchCarsRequestDto
 } from '../../core/models/car-rental.models';
-
-const DOMESTIC_LOCATIONS = ['mumbai', 'delhi'];
+import { trimmedRequiredValidator } from '../../core/validation/trimmed-required.validator';
 
 @Component({
   selector: 'app-booking-form',
@@ -31,29 +30,38 @@ export class BookingFormComponent {
   localDocumentError = '';
 
   readonly form = this.formBuilder.group({
-    driverName: [''],
-    documentType: [''],
-    documentNumber: ['']
+    driverName: ['', [Validators.required, trimmedRequiredValidator]],
+    documentType: ['', Validators.required],
+    documentNumber: ['', [Validators.required, trimmedRequiredValidator]]
   });
 
   get expectedDocumentType(): string {
-    const pickup = this.searchCriteria.pickup.trim().toLowerCase();
-    return DOMESTIC_LOCATIONS.includes(pickup) ? 'NationalId' : 'Passport';
+    const pickupLocationType = (this.searchCriteria.pickupLocationType ?? '').trim().toLowerCase();
+
+    if (pickupLocationType === 'domestic') {
+      return 'NationalId';
+    }
+
+    if (pickupLocationType === 'international') {
+      return 'Passport';
+    }
+
+    return '';
   }
 
   submit(): void {
     this.form.markAllAsTouched();
     this.localDocumentError = '';
 
+    if (this.form.invalid) {
+      return;
+    }
+
     const driverName = (this.form.value.driverName ?? '').trim();
     const documentType = (this.form.value.documentType ?? '').trim();
     const documentNumber = (this.form.value.documentNumber ?? '').trim();
 
-    if (!driverName || !documentType || !documentNumber) {
-      return;
-    }
-
-    if (documentType !== this.expectedDocumentType) {
+    if (this.expectedDocumentType && documentType !== this.expectedDocumentType) {
       this.localDocumentError = `For ${this.searchCriteria.pickup}, document type must be ${this.expectedDocumentType}.`;
       return;
     }

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BookingDetailsResponseDto } from '../../core/models/car-rental.models';
 import { CarRentalApiService } from '../../core/services/car-rental-api.service';
+import { trimmedRequiredValidator } from '../../core/validation/trimmed-required.validator';
 
 @Component({
   selector: 'app-booking-lookup',
@@ -21,7 +22,7 @@ export class BookingLookupComponent implements OnChanges {
   booking: BookingDetailsResponseDto | null = null;
 
   readonly form = this.formBuilder.group({
-    reference: ['']
+    reference: ['', [Validators.required, trimmedRequiredValidator]]
   });
 
   constructor(
@@ -36,10 +37,12 @@ export class BookingLookupComponent implements OnChanges {
 
   lookup(): void {
     this.form.markAllAsTouched();
-    const reference = (this.form.value.reference ?? '').trim();
-    if (!reference) {
+
+    if (this.form.invalid) {
       return;
     }
+
+    const reference = (this.form.value.reference ?? '').trim();
 
     this.booking = null;
     this.errorMessage = '';

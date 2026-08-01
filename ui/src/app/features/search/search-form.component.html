@@ -3,17 +3,40 @@
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <label>
       Pickup location
-      <input type="text" formControlName="pickup" placeholder="Mumbai" />
+      <select formControlName="pickup" [disabled]="isLoadingPickupLocations || pickupLocations.length === 0">
+        <option value="">Select a pickup location</option>
+        <optgroup label="Domestic" *ngIf="domesticPickupLocations.length > 0">
+          <option *ngFor="let location of domesticPickupLocations" [value]="location.name">
+            {{ location.name }}
+          </option>
+        </optgroup>
+        <optgroup label="International" *ngIf="internationalPickupLocations.length > 0">
+          <option *ngFor="let location of internationalPickupLocations" [value]="location.name">
+            {{ location.name }}
+          </option>
+        </optgroup>
+      </select>
+      <p class="field-error" *ngIf="form.controls.pickup.touched && (form.controls.pickup.hasError('required') || form.controls.pickup.hasError('trimmedRequired'))">
+        Pickup location is required.
+      </p>
+      <small *ngIf="isLoadingPickupLocations">Loading supported pickup locations...</small>
+      <p class="field-error" *ngIf="pickupLocationsErrorMessage && !isLoadingPickupLocations">{{ pickupLocationsErrorMessage }}</p>
     </label>
 
     <label>
       Pickup date
       <input type="date" formControlName="from" />
+      <p class="field-error" *ngIf="form.controls.from.touched && form.controls.from.hasError('required')">
+        Pickup date is required.
+      </p>
     </label>
 
     <label>
       Return date
       <input type="date" formControlName="to" />
+      <p class="field-error" *ngIf="form.controls.to.touched && form.controls.to.hasError('required')">
+        Return date is required.
+      </p>
     </label>
 
     <label>
@@ -26,7 +49,7 @@
     </label>
 
     <div class="actions">
-      <button type="submit">Search</button>
+      <button type="submit" [disabled]="form.invalid || isSearching || isLoadingPickupLocations || pickupLocations.length === 0">Search</button>
     </div>
   </form>
 

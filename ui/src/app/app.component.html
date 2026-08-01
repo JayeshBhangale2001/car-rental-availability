@@ -4,7 +4,13 @@
     <p>Search, book, and lookup car rentals using the backend contracts.</p>
   </header>
 
-  <app-search-form (searchRequested)="onSearchRequested($event)"></app-search-form>
+  <app-search-form
+    [isSearching]="isSearching"
+    [pickupLocations]="pickupLocations"
+    [isLoadingPickupLocations]="isLoadingPickupLocations"
+    [pickupLocationsErrorMessage]="pickupLocationsErrorMessage"
+    (searchRequested)="onSearchRequested($event)">
+  </app-search-form>
 
   <app-search-results
     [offers]="offers"

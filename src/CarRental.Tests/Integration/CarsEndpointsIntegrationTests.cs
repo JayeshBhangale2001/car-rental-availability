@@ -9,6 +9,24 @@ namespace CarRental.Tests.Integration;
 public class CarsEndpointsIntegrationTests
 {
     [Fact]
+    public async Task PickupLocations_Returns200AndSupportedLocations()
+    {
+        using var testClient = CreateTestClient();
+        var client = testClient.Client;
+
+        var response = await client.GetAsync("/cars/pickup-locations");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var locations = await response.Content.ReadFromJsonAsync<JsonElement[]>();
+        Assert.NotNull(locations);
+        Assert.Equal(5, locations!.Length);
+
+        var mumbai = locations.FirstOrDefault(x => x.GetProperty("name").GetString() == "Mumbai");
+        Assert.Equal("Domestic", mumbai.GetProperty("locationType").GetString());
+    }
+
+    [Fact]
     public async Task Search_Returns200AndOffers_WhenRequestIsValid()
     {
         using var testClient = CreateTestClient();

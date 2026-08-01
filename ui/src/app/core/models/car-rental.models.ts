@@ -1,8 +1,14 @@
 export interface SearchCarsRequestDto {
   pickup: string;
+  pickupLocationType?: string;
   from: string;
   to: string;
   category?: string;
+}
+
+export interface PickupLocationResponseDto {
+  name: string;
+  locationType: string;
 }
 
 export interface SearchCarResponseDto {

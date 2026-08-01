@@ -4,8 +4,11 @@
     <label>
       Booking reference
       <input type="text" formControlName="reference" placeholder="BK-XXXX" />
+      <p class="field-error" *ngIf="form.controls.reference.touched && (form.controls.reference.hasError('required') || form.controls.reference.hasError('trimmedRequired'))">
+        Booking reference is required.
+      </p>
     </label>
-    <button type="submit" [disabled]="isLoading">{{ isLoading ? 'Searching...' : 'Lookup' }}</button>
+    <button type="submit" [disabled]="form.invalid || isLoading">{{ isLoading ? 'Searching...' : 'Lookup' }}</button>
   </form>
 
   <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>

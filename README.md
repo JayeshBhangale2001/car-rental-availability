@@ -28,6 +28,8 @@ Layer responsibilities:
 
 ## Setup
 
+For a full Windows new-machine setup and troubleshooting guide, see `NEW_MACHINE_SETUP.md`.
+
 Prerequisites:
 - .NET SDK 8.0+
 - Node.js 18+ and npm
@@ -57,7 +59,7 @@ Frontend overview:
 - API models are reused from backend response/request shapes in `ui/src/app/core/models/car-rental.models.ts`
 
 Supported UI flow:
-- Search form
+- Search form with supported pickup location selection
 - Available offers (sorted by total price ascending)
 - Select offer
 - Booking form
@@ -74,6 +76,11 @@ Local API/proxy behavior:
 - `ui/proxy.conf.json` proxies `/cars` to `http://localhost:5000`
 - `environment.apiBaseUrl` is empty (`''`) for local proxy-based calls
 - If backend runs on a different URL/port, update `ui/proxy.conf.json` target
+
+Pickup location discoverability:
+- Frontend loads supported pickup locations from `GET /cars/pickup-locations`
+- Search uses a guided dropdown grouped by Domestic and International
+- This avoids trial-and-error for unsupported locations
 
 ## Supported Pickup Locations
 
@@ -92,7 +99,13 @@ Matching is case-insensitive after trimming input.
 
 ## API Endpoints
 
-### 1) Search Cars
+### 1) Get Supported Pickup Locations
+
+- Method/Path: `GET /cars/pickup-locations`
+- Success: `200 OK`
+- Response: list of `{ name, locationType }`
+
+### 2) Search Cars
 
 - Method/Path: `GET /cars/search`
 - Query:
@@ -101,7 +114,7 @@ Matching is case-insensitive after trimming input.
 - Success: `200 OK`
 - Main errors: `400 Bad Request`
 
-### 2) Create Booking
+### 3) Create Booking
 
 - Method/Path: `POST /cars/book`
 - Body includes selected offer context plus driver/document/rental details
@@ -114,7 +127,7 @@ Document business rule:
 - Domestic pickup requires `NationalId`
 - International pickup requires `Passport`
 
-### 3) Get Booking By Reference
+### 4) Get Booking By Reference
 
 - Method/Path: `GET /cars/booking/{reference}`
 - Success: `200 OK`
@@ -126,6 +139,12 @@ Search:
 
 ```bash
 curl "http://localhost:5000/cars/search?pickup=Mumbai&from=2026-07-01&to=2026-07-04&category=Economy"
+```
+
+Pickup locations:
+
+```bash
+curl "http://localhost:5000/cars/pickup-locations"
 ```
 
 Book:

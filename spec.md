@@ -28,6 +28,9 @@ This specification defines the implementation blueprint for the Car Rental Avail
 ### 2.1 Search and Provider Aggregation
 - The system shall query both providers and return a normalized list of available vehicles.
 - Supported categories are Economy, Compact, SUV, and Minivan.
+- Supported pickup locations are provided through metadata for frontend discoverability.
+- Metadata endpoint:
+  - `GET /cars/pickup-locations`
 - Endpoint:
   - `GET /cars/search?pickup={location}&from={date}&to={date}&category={category}`
 - Query parameters:
@@ -125,7 +128,13 @@ This specification defines the implementation blueprint for the Car Rental Avail
 
 ## 5. API Contracts and Validation
 
-### 5.1 GET /cars/search
+### 5.1 GET /cars/pickup-locations
+Success:
+- Returns supported pickup locations with location type:
+  - name
+  - locationType (Domestic/International)
+
+### 5.2 GET /cars/search
 Query parameters:
 - pickup (required)
 - from (required, `YYYY-MM-DD`)
@@ -142,7 +151,7 @@ Validation and errors:
 - HTTP 400 when pickup location is unsupported.
 - Unavailable BudgetWheels entries are not included in success results.
 
-### 5.2 POST /cars/book
+### 5.3 POST /cars/book
 Request body includes:
 - Selected offer/provider context
 - driverName
@@ -159,7 +168,7 @@ Validation and errors:
   - International pickup -> Passport
 - HTTP 422 with clear message on document mismatch.
 
-### 5.3 GET /cars/booking/{reference}
+### 5.4 GET /cars/booking/{reference}
 Path parameter:
 - reference
 
@@ -172,8 +181,8 @@ Errors:
 ## 6. Frontend Behaviour
 
 ### 6.1 Search
-- User enters pickup location, pickup date, return date, and optional category.
-- Client-side validation mirrors server validation for required fields and date ordering.
+- User selects pickup location from supported location metadata, enters pickup date, return date, and optional category.
+- Client-side validation mirrors server validation for required fields and date ordering, including trimmed required string checks.
 - On submit, frontend calls `GET /cars/search` and renders one of:
   - results state
   - empty state
@@ -227,6 +236,7 @@ Errors:
   - category and location validation behavior
   - document validation behavior (domestic/international)
 - API behavior tests cover:
+  - pickup-location metadata response behavior
   - search input validation and date validation
   - booking 422 on document mismatch
   - successful booking response contents

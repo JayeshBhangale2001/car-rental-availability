@@ -11,6 +11,13 @@ public sealed record SearchCarsRequestDto
     public string? Category { get; init; }
 }
 
+public sealed record PickupLocationResponseDto
+{
+    public required string Name { get; init; }
+
+    public required string LocationType { get; init; }
+}
+
 public sealed record SearchCarResponseDto
 {
     public required string Provider { get; init; }

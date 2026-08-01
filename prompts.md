@@ -320,7 +320,9 @@ Review `spec.md` and the existing Core services.
 Implement the Minimal API for search, booking, and booking lookup. Keep the endpoints thin and reuse the existing Core services and validators.
 
 ### Outcome
-Implemented three Minimal API endpoints:
+Implemented four Minimal API endpoints:
+
+- GET /cars/pickup-locations
 
 - GET /cars/search
 - POST /cars/book
@@ -342,13 +344,13 @@ Cover search, booking, and booking lookup with both success and error scenarios.
 ### Outcome
 Added integration tests for all API endpoints using `WebApplicationFactory`.
 
-Covered successful search, booking creation, booking lookup, invalid requests (400), business-rule validation (422), and missing booking references (404).
+Covered pickup-locations metadata behavior, successful search, booking creation, booking lookup, invalid requests (400), business-rule validation (422), and missing booking references (404).
 
 Final test results:
-- Unit + Integration Tests: **57 Passed**
+- Unit + Integration Tests: **58 Passed**
 - **0 Failed**
 
-## 15. Swagger and OpenAPI
+## 16. Swagger and OpenAPI
 
 ### Objective
 Document the API endpoints and response contracts.
@@ -356,18 +358,18 @@ Document the API endpoints and response contracts.
 ### Representative Prompt
 Add Swagger/OpenAPI support to the API.
 
-Include clear endpoint names, response types, and status codes for search, booking, and booking lookup.
+Include clear endpoint names, response types, and status codes for pickup-locations, search, booking, and booking lookup.
 
 Keep the changes limited to API configuration and endpoint metadata.
 
 ### Outcome
 Enabled Swagger UI and OpenAPI generation.
 
-Added endpoint names, summaries, descriptions, tags, typed response metadata, and status-code documentation for all three API routes.
+Added endpoint names, summaries, descriptions, tags, typed response metadata, and status-code documentation for all API routes.
 
 Also added a typed not-found response for booking lookup.
 
-## 16. Frontend Implementation
+## 17. Frontend Implementation
 
 ### Objective
 Implement the Angular UI flow for car search, booking, confirmation, and booking lookup using the existing API contracts.
@@ -394,12 +396,42 @@ Implemented the full UI flow:
 - Booking confirmation view with reference
 - Booking lookup by reference
 
+Identified UX gap: users had to guess supported pickup locations and rely on API trial-and-error.
+
 ### Validation/Build Result
 Validated the frontend by installing dependencies and running the Angular build.
 
 Final frontend build result:
 - Angular Build: **Passed**
 - Output: `ui/dist/car-rental-ui`
+
+## 18. Pickup Location Discoverability Alignment
+
+### Objective
+Align frontend pickup validation UX with the case-study validation rules by exposing supported pickup locations from the backend.
+
+### Representative Prompt
+Review frontend and API validation behavior for pickup locations.
+
+If unsupported locations currently require trial-and-error, expose supported locations through a metadata endpoint and update the frontend search form to guide the user.
+
+Keep business rules in Core, keep endpoints thin, and ensure the booking document-type expectation remains consistent with pickup location type.
+
+Update documentation and tests after implementation.
+
+### Outcome
+Implemented a new metadata endpoint:
+- `GET /cars/pickup-locations`
+
+Updated frontend search flow to load supported locations and render grouped dropdown options (Domestic/International), eliminating trial-and-error input for pickup location.
+
+Updated booking form expectation logic to use selected pickup location type metadata rather than hardcoded local assumptions.
+
+Added a new API integration test for pickup-location metadata.
+
+Validation summary after this update:
+- Unit + Integration Tests: **58 Passed**
+- Angular Build: **Passed**
 
 ## AI Usage Summary
 

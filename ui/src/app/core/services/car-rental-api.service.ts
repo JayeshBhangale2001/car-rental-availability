@@ -9,6 +9,7 @@ import {
     BookingConfirmationResponseDto,
     BookingDetailsResponseDto,
     BookingNotFoundResponseDto,
+    PickupLocationResponseDto,
     SearchCarResponseDto,
     SearchCarsRequestDto
 } from '../models/car-rental.models';
@@ -20,6 +21,10 @@ export class CarRentalApiService {
   private readonly baseUrl = `${environment.apiBaseUrl}/cars`;
 
   constructor(private readonly httpClient: HttpClient) {}
+
+  getPickupLocations(): Observable<PickupLocationResponseDto[]> {
+    return this.httpClient.get<PickupLocationResponseDto[]>(`${this.baseUrl}/pickup-locations`);
+  }
 
   searchCars(request: SearchCarsRequestDto): Observable<SearchCarResponseDto[]> {
     let params = new HttpParams()
