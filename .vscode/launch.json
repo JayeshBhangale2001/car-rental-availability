@@ -1,0 +1,61 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API (Debug)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-backend",
+      "program": "${workspaceFolder}/src/CarRental.Api/bin/Debug/net8.0/CarRental.Api.dll",
+      "cwd": "${workspaceFolder}/src/CarRental.Api",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000"
+      }
+    },
+    {
+      "name": "API (Run)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-backend",
+      "program": "${workspaceFolder}/src/CarRental.Api/bin/Debug/net8.0/CarRental.Api.dll",
+      "cwd": "${workspaceFolder}/src/CarRental.Api",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000"
+      },
+      "noDebug": true
+    },
+    {
+      "name": "UI (Debug)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/ui/src",
+      "sourceMaps": true
+    },
+    {
+      "name": "UI (Run)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm start",
+      "cwd": "${workspaceFolder}/ui",
+      "console": "integratedTerminal",
+      "noDebug": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Car Rental App (F5)",
+      "configurations": ["API (Debug)", "UI (Debug)"]
+    },
+    {
+      "name": "Car Rental App (Ctrl+F5)",
+      "configurations": ["API (Run)", "UI (Run)"]
+    }
+  ]
+}
